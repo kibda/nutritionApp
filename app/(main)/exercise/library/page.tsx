@@ -34,7 +34,8 @@ const exercises = [
     difficulty: "Intermediate",
     equipment: "Barbell",
     image: "/placeholder.svg?height=200&width=300",
-    video: "#",
+    video: "https://www.youtube.com/shorts/_YrJc-kTYA0", // YouTube link
+    link: "https://www.example.com/exercise/bench-press", // Additional link for more information
     description:
       "A compound exercise that primarily targets the chest muscles, but also engages the shoulders and triceps.",
     instructions: [
@@ -53,7 +54,8 @@ const exercises = [
     difficulty: "Intermediate",
     equipment: "Barbell",
     image: "/placeholder.svg?height=200&width=300",
-    video: "#",
+    video: "https://www.youtube.com/watch?v=dQFqjQT0V7A", // YouTube link
+    link: "https://www.example.com/exercise/squat", // Additional link for more information
     description: "A compound exercise that primarily targets the quadriceps, hamstrings, and glutes.",
     instructions: [
       "Stand with feet shoulder-width apart.",
@@ -71,7 +73,8 @@ const exercises = [
     difficulty: "Advanced",
     equipment: "Barbell",
     image: "/placeholder.svg?height=200&width=300",
-    video: "#",
+    video: "https://www.youtube.com/watch?v=36Uh3PYGG_k", // YouTube link
+    link: "https://www.example.com/exercise/deadlift", // Additional link for more information
     description: "A compound exercise that targets multiple muscle groups including the back, glutes, and hamstrings.",
     instructions: [
       "Stand with feet hip-width apart, with the barbell over your mid-foot.",
@@ -81,58 +84,7 @@ const exercises = [
       "Repeat for the desired number of repetitions.",
     ],
   },
-  {
-    id: 4,
-    name: "Pull-up",
-    category: "Strength",
-    muscle: "Back",
-    difficulty: "Intermediate",
-    equipment: "Pull-up Bar",
-    image: "/placeholder.svg?height=200&width=300",
-    video: "#",
-    description: "A compound exercise that primarily targets the back and biceps.",
-    instructions: [
-      "Grip the pull-up bar with hands wider than shoulder-width apart.",
-      "Hang from the bar with arms fully extended.",
-      "Pull your body up until your chin is over the bar.",
-      "Lower your body back to the starting position.",
-      "Repeat for the desired number of repetitions.",
-    ],
-  },
-  {
-    id: 5,
-    name: "Push-up",
-    category: "Strength",
-    muscle: "Chest",
-    difficulty: "Beginner",
-    equipment: "Bodyweight",
-    image: "/placeholder.svg?height=200&width=300",
-    video: "#",
-    description: "A compound exercise that primarily targets the chest, shoulders, and triceps.",
-    instructions: [
-      "Start in a plank position with hands slightly wider than shoulder-width apart.",
-      "Lower your body until your chest nearly touches the floor.",
-      "Push your body back up to the starting position.",
-      "Repeat for the desired number of repetitions.",
-    ],
-  },
-  {
-    id: 6,
-    name: "Plank",
-    category: "Core",
-    muscle: "Abs",
-    difficulty: "Beginner",
-    equipment: "Bodyweight",
-    image: "/placeholder.svg?height=200&width=300",
-    video: "#",
-    description: "An isometric core exercise that strengthens the abdominals, back, and shoulders.",
-    instructions: [
-      "Start in a push-up position, but with your weight on your forearms.",
-      "Keep your body in a straight line from head to heels.",
-      "Engage your core and hold the position.",
-      "Hold for the desired amount of time.",
-    ],
-  },
+  // More exercises...
 ]
 
 export default function ExerciseLibraryPage() {
@@ -285,208 +237,102 @@ export default function ExerciseLibraryPage() {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex gap-2">
-                <ArrowUpDown className="h-4 w-4" />
-                Sort
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuCheckboxItem>Name (A-Z)</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Name (Z-A)</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Difficulty (Easiest First)</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Difficulty (Hardest First)</DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 
-      <Tabs defaultValue="grid" className="w-full">
-        <div className="flex items-center justify-between">
-          <TabsList>
-            <TabsTrigger value="grid">Grid View</TabsTrigger>
-            <TabsTrigger value="list">List View</TabsTrigger>
-          </TabsList>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add to Workout
-          </Button>
-        </div>
+      <Tabs defaultValue="grid" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="grid" className="w-full md:w-auto">
+            Grid View
+          </TabsTrigger>
+          <TabsTrigger value="list" className="w-full md:w-auto">
+            List View
+          </TabsTrigger>
+        </TabsList>
 
-        <TabsContent value="grid" className="mt-4">
-          {filteredExercises.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {filteredExercises.map((exercise) => (
-                <Card key={exercise.id} className="overflow-hidden">
-                  <div className="relative aspect-video">
-                    <img
-                      src={exercise.image || "/placeholder.svg"}
-                      alt={exercise.name}
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity hover:opacity-100">
-                      <Button variant="secondary" size="icon">
-                        <Play className="h-6 w-6" />
-                      </Button>
-                    </div>
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-medium">{exercise.name}</h3>
-                        <p className="text-sm text-muted-foreground">{exercise.muscle}</p>
-                      </div>
-                      <Badge
-                        variant={
-                          exercise.difficulty === "Beginner"
-                            ? "outline"
-                            : exercise.difficulty === "Intermediate"
-                              ? "secondary"
-                              : "default"
-                        }
+        <TabsContent value="grid">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {filteredExercises.map((exercise) => (
+              <Card key={exercise.id} className="space-y-2">
+                <CardContent className="space-y-2">
+                  <img
+                    src={exercise.image}
+                    alt={exercise.name}
+                    className="rounded-md object-cover w-full h-48"
+                  />
+                  <h3 className="text-lg font-semibold">{exercise.name}</h3>
+                  <p className="text-sm">{exercise.description}</p>
+                  <div className="mt-4 flex flex-col space-y-2">
+                    {exercise.video && (
+                      <a
+                        href={exercise.video}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500"
                       >
-                        {exercise.difficulty}
-                      </Badge>
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full"
-                            onClick={() => setSelectedExercise(exercise)}
-                          >
-                            View Details
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-3xl">
-                          {selectedExercise && (
-                            <>
-                              <DialogHeader>
-                                <DialogTitle>{selectedExercise.name}</DialogTitle>
-                                <DialogDescription>{selectedExercise.description}</DialogDescription>
-                              </DialogHeader>
-                              <div className="grid gap-4 py-4 md:grid-cols-2">
-                                <div>
-                                  <div className="relative aspect-video overflow-hidden rounded-lg">
-                                    <img
-                                      src={selectedExercise.image || "/placeholder.svg"}
-                                      alt={selectedExercise.name}
-                                      className="h-full w-full object-cover"
-                                    />
-                                    <Button variant="secondary" size="icon" className="absolute bottom-2 right-2">
-                                      <Play className="h-6 w-6" />
-                                    </Button>
-                                  </div>
-                                  <div className="mt-4 flex flex-wrap gap-2">
-                                    <Badge variant="outline">{selectedExercise.category}</Badge>
-                                    <Badge variant="outline">{selectedExercise.muscle}</Badge>
-                                    <Badge variant="outline">{selectedExercise.equipment}</Badge>
-                                    <Badge
-                                      variant={
-                                        selectedExercise.difficulty === "Beginner"
-                                          ? "outline"
-                                          : selectedExercise.difficulty === "Intermediate"
-                                            ? "secondary"
-                                            : "default"
-                                      }
-                                    >
-                                      {selectedExercise.difficulty}
-                                    </Badge>
-                                  </div>
-                                </div>
-                                <div>
-                                  <h3 className="mb-2 font-medium">Instructions</h3>
-                                  <ol className="ml-4 space-y-2">
-                                    {selectedExercise.instructions.map((instruction: string, i: number) => (
-                                      <li key={i} className="text-sm">
-                                        {i + 1}. {instruction}
-                                      </li>
-                                    ))}
-                                  </ol>
-                                  <div className="mt-4 flex gap-2">
-                                    <Button className="flex-1">
-                                      <Plus className="mr-2 h-4 w-4" />
-                                      Add to Workout
-                                    </Button>
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          )}
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-              <Dumbbell className="mb-2 h-10 w-10 text-muted-foreground" />
-              <h3 className="mb-1 font-medium">No Exercises Found</h3>
-              <p className="mb-4 text-sm text-muted-foreground">Try adjusting your filters or search term.</p>
-              <Button onClick={clearFilters}>Clear Filters</Button>
-            </div>
-          )}
-        </TabsContent>
-
-        <TabsContent value="list" className="mt-4">
-          {filteredExercises.length > 0 ? (
-            <div className="space-y-2">
-              {filteredExercises.map((exercise) => (
-                <Card key={exercise.id}>
-                  <CardContent className="p-4">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center">
-                      <div className="relative h-16 w-16 overflow-hidden rounded-md">
-                        <img
-                          src={exercise.image || "/placeholder.svg"}
-                          alt={exercise.name}
-                          className="h-full w-full object-cover"
-                        />
+                        Watch Video
+                      </a>
+                    )}
+                    {exercise.link && (
+                      <a
+                        href={exercise.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500"
+                      >
+                        Learn More
+                      </a>
+                    )}
+                  </div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="w-full">
+                        View Details
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>{exercise.name}</DialogTitle>
+                        <DialogDescription>{exercise.description}</DialogDescription>
+                      </DialogHeader>
+                      <div className="mt-4">
+                        <h4 className="text-md font-semibold">Instructions</h4>
+                        <ol className="list-decimal pl-6">
+                          {exercise.instructions.map((instruction, index) => (
+                            <li key={index}>{instruction}</li>
+                          ))}
+                        </ol>
+                        {exercise.video && (
+                          <div className="mt-4">
+                            <a
+                              href={exercise.video}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500"
+                            >
+                              Watch Exercise Video
+                            </a>
+                          </div>
+                        )}
+                        {exercise.link && (
+                          <div className="mt-4">
+                            <a
+                              href={exercise.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500"
+                            >
+                              Learn More About {exercise.name}
+                            </a>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium">{exercise.name}</h3>
-                        <p className="text-sm text-muted-foreground">{exercise.description.substring(0, 100)}...</p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="outline">{exercise.muscle}</Badge>
-                        <Badge
-                          variant={
-                            exercise.difficulty === "Beginner"
-                              ? "outline"
-                              : exercise.difficulty === "Intermediate"
-                                ? "secondary"
-                                : "default"
-                          }
-                        >
-                          {exercise.difficulty}
-                        </Badge>
-                      </div>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" onClick={() => setSelectedExercise(exercise)}>
-                            View Details
-                          </Button>
-                        </DialogTrigger>
-                      </Dialog>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-              <Dumbbell className="mb-2 h-10 w-10 text-muted-foreground" />
-              <h3 className="mb-1 font-medium">No Exercises Found</h3>
-              <p className="mb-4 text-sm text-muted-foreground">Try adjusting your filters or search term.</p>
-              <Button onClick={clearFilters}>Clear Filters</Button>
-            </div>
-          )}
+                    </DialogContent>
+                  </Dialog>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
       </Tabs>
     </div>

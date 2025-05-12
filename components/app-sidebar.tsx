@@ -42,6 +42,8 @@ export function AppSidebar() {
     nutrition: true,
     exercise: true,
     coaching: true,
+    feedback: true,
+    admin: true,
   })
 
   const isActive = (path: string) => pathname === path
@@ -203,11 +205,102 @@ export function AppSidebar() {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                  {/* meraih */}
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/Payment")}>
+                      <Link href="/Payment">
+                        <CreditCard />
+                        <span>Payment</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/BookingConfirmation")}>
+                      <Link href="/BookingConfirmation">
+                        <CreditCard />
+                        <span>Booking Confirmation </span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/CoachReservation")}>
+                      <Link href="/CoachReservation">
+                        <CreditCard />
+                        <span>coach Reservation</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </CollapsibleContent>
           </SidebarGroup>
         </Collapsible>
+
+        <Collapsible>
+        <SidebarGroup>
+            <SidebarGroupLabel asChild>
+              <CollapsibleTrigger className="flex w-full items-center">
+                Feedback
+                <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+              </CollapsibleTrigger>
+            </SidebarGroupLabel>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/Feedback")}>
+                      <Link href="/Feedback">
+                        <Utensils />
+                        <span>Feedback</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/Feedback-Dashboard")}>
+                      <Link href="/Feedback-Dashboard">
+                        <Activity />
+                        <span>Feedback Dashboard</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </SidebarGroup>
+        </Collapsible>
+
+        <Collapsible
+          open={openGroups.admin}
+          onOpenChange={(open) => setOpenGroups({ ...openGroups, admin: open })}
+          className="group/collapsible"
+        >
+          <SidebarGroup>
+            <SidebarGroupLabel asChild>
+              <CollapsibleTrigger className="flex w-full items-center">
+                Admin
+                <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+              </CollapsibleTrigger>
+            </SidebarGroupLabel>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/nutrition/meal-plans")}>
+                      <Link href="/admin/manageCoaches">
+                        <Utensils />
+                        <span>Manage Coaches</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </SidebarGroup>
+        </Collapsible>
+
+
+
       </SidebarContent>
 
       <SidebarFooter className="p-4">

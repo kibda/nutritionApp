@@ -20,77 +20,14 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
-import mealPlans2 from "@/app/data/mealPlans"
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-
+import mealPlans from "@/app/data/mealPlans"
 
 // Sample meal plan data
 
 
 export default function MealPlansPage() {
   const [date, setDate] = useState<Date>(new Date())
-  const [mealPlans, setmealPlans] = useState(mealPlans2)
-
-  const [selectedPlan, setSelectedPlan] = useState(mealPlans2[0])
-
-  const [open, setOpen] = useState(false)
-const [newPlanName, setNewPlanName] = useState("")
-const [newPlanDesc, setNewPlanDesc] = useState("")
-
-const [openAddMeal, setOpenAddMeal] = useState(false)
-const [newMealName, setNewMealName] = useState("")
-const [newMealTime, setNewMealTime] = useState("")
-
-
-const [newFoods, setNewFoods] = useState<{ name: string; amount: string; calories: string; protein: string; carbs: string; fat: string; }[]>([])
-
-const [currentFood, setCurrentFood] = useState({
-  name: "",
-  amount: "",
-  calories: "",
-  protein: "",
-  carbs: "",
-  fat: "",
-})
-
-
-
-const [newMeals, setNewMeals] = useState([
-  {
-    id: Date.now(),
-    name: "",
-    time: "",
-    foods: [
-      {
-        name: "",
-        amount: "",
-        calories: 0,
-        protein: 0,
-        carbs: 0,
-        fat: 0,
-      },
-    ],
-  },
-])
-
-function calculateNutritionFromMeals(meals:any[]) {
-  return meals.reduce(
-    (totals, meal) => {
-      totals.calories += meal.calories
-      totals.protein += meal.protein
-      totals.carbs += meal.carbs
-      totals.fat += meal.fat
-      return totals
-    },
-    { calories: 0, protein: 0, carbs: 0, fat: 0 }
-  )
-}
-
-
+  const [selectedPlan, setSelectedPlan] = useState(mealPlans[0])
   
 
   
@@ -99,66 +36,10 @@ function calculateNutritionFromMeals(meals:any[]) {
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Meal Plans</h2>
-                        <Dialog open={open} onOpenChange={setOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="bg-gradient-to-r from-green-500 to-blue-600">
-                      <Plus className="mr-2 h-4 w-4 " />
-                      Create New Plan
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create New Meal Plan</DialogTitle>
-                    </DialogHeader>
-
-
-                    {/* Add your form fields here */}
-
-
-                    <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-                  <Input
-                    placeholder="Plan name"
-                    value={newPlanName}
-                    onChange={(e) => setNewPlanName(e.target.value)}
-                  />
-                  <Textarea
-                    placeholder="Plan description"
-                    value={newPlanDesc}
-                    onChange={(e) => setNewPlanDesc(e.target.value)}
-                  />
-                  
-                
-                </div>
-
-
-                    
-
-                    <DialogFooter className="mt-4">
-                      <Button
-                        onClick={() => {
-                          const newPlan = {
-                            id: Date.now(),
-                            name: newPlanName,
-                            description: newPlanDesc,
-                            calories: 0,
-                            protein: 0,
-                            carbs: 0,
-                            fat: 0,
-                            meals: [],
-                          }
-                        setmealPlans([...mealPlans, newPlan]) // You'd normally use useState to manage this instead
-                          setSelectedPlan(newPlan)
-                          setNewPlanName("")
-                          setNewPlanDesc("")
-                          setOpen(false)
-                        }}
-                      >
-                        Save
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Create New Plan
+        </Button>
       </div>
 
       <Tabs defaultValue="plans" className="space-y-4">
@@ -171,7 +52,7 @@ function calculateNutritionFromMeals(meals:any[]) {
         <TabsContent value="plans" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {mealPlans.map((plan) => (
-              <Card key={plan.id} className={`flex flex-col h-full ${plan.id === selectedPlan.id ? "border-primary" : ""}`}>
+              <Card key={plan.id} className={plan.id === selectedPlan.id ? "border-primary" : ""}>
                 <CardHeader>
                   <CardTitle>{plan.name}</CardTitle>
                   <CardDescription>{plan.description}</CardDescription>
@@ -195,8 +76,6 @@ function calculateNutritionFromMeals(meals:any[]) {
                       <span className="text-xl font-bold">{plan.fat}g</span>
                     </div>
                   </div>
-
-                  {plan.meals.length > 0 ? (
                   <div className="mt-4">
                     <h4 className="mb-2 font-medium">Meals</h4>
                     <div className="space-y-2">
@@ -219,17 +98,7 @@ function calculateNutritionFromMeals(meals:any[]) {
                       )}
                     </div>
                   </div>
-                  ) : (
-                    <div className="mt-4">
-                    <h4 className="mb-2 font-medium">Meals</h4>
-                    <div className="mt-4 text-center text-sm text-muted-foreground">
-                      No meals planned yet.
-                    </div>
-                  </div>
-                  )}
                 </CardContent>
-               
-                <div className="flex-grow" />
                 <CardFooter className="flex justify-between">
                   <Button variant="outline" size="sm" onClick={() => setSelectedPlan(plan)}>
                     View Details
@@ -241,22 +110,9 @@ function calculateNutritionFromMeals(meals:any[]) {
                     <Button variant="ghost" size="icon">
                       <Copy className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        const updatedPlans = mealPlans.filter((p) => p.id !== plan.id)
-                        setmealPlans(updatedPlans)
-
-                        // Deselect the deleted plan if it's selected
-                        if (selectedPlan?.id === plan.id) {
-                          setSelectedPlan(updatedPlans[0] || null)
-                        }
-                      }}
-                    >
-                      <Trash className="h-4 w-4 text-red-500" />
+                    <Button variant="ghost" size="icon">
+                      <Trash className="h-4 w-4" />
                     </Button>
-
                   </div>
                 </CardFooter>
               </Card>
@@ -295,33 +151,6 @@ function calculateNutritionFromMeals(meals:any[]) {
                             <Clock className="mr-1 h-4 w-4" />
                             {meal.time}
                           </div>
-
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              const updatedMeals = selectedPlan.meals.filter((m) => m.id !== meal.id)
-
-                              const updatedNutrition = calculateNutritionFromMeals(updatedMeals)
-
-                              const updatedPlan = {
-                                ...selectedPlan,
-                                meals: updatedMeals,
-                                ...updatedNutrition, // overwrite calories, protein, carbs, fat
-                              }
-
-                              const updatedPlans = mealPlans.map((plan) =>
-                                plan.id === selectedPlan.id ? updatedPlan : plan
-                              )
-
-                              setmealPlans(updatedPlans)
-                              setSelectedPlan(updatedPlan)
-                            }}
-                          >
-                            <Trash className="h-4 w-4 text-red-500" />
-                          </Button>
-
-
                         </div>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
@@ -372,179 +201,10 @@ function calculateNutritionFromMeals(meals:any[]) {
                   ))}
                 </div>
               </div>
-              <div className="pt-4 text-right">
-        <Button className="bg-gradient-to-r from-green-500 to-blue-600" onClick={() => setOpenAddMeal(true)}>+ Add Meal</Button>
-
-      </div>
-      <Dialog open={openAddMeal} onOpenChange={setOpenAddMeal}>
-            <DialogContent>
-              <DialogHeader>
-            <DialogTitle>Add New Meal</DialogTitle>
-            <DialogDescription>Enter meal and food details below</DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 pt-4">
-            <div className="space-y-1">
-              <Label htmlFor="meal-name">Meal Name</Label>
-              <Input
-                id="meal-name"
-                value={newMealName}
-                onChange={(e) => setNewMealName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="meal-time">Time</Label>
-              <Input
-                id="meal-time"
-                type="time"
-                value={newMealTime}
-                onChange={(e) => setNewMealTime(e.target.value)}
-              />
-            </div>
-
-            <Separator />
-            <h4 className="text-sm font-medium">Add Foods</h4>
-            <div className="grid grid-cols-2 gap-2">
-              <Input
-                placeholder="Food Name"
-                value={currentFood.name}
-                onChange={(e) => setCurrentFood({ ...currentFood, name: e.target.value })}
-              />
-              <Input
-                placeholder="Amount (e.g. 1 cup)"
-                value={currentFood.amount}
-                onChange={(e) => setCurrentFood({ ...currentFood, amount: e.target.value })}
-              />
-              <Input
-                type="number"
-                placeholder="Calories"
-                value={currentFood.calories}
-                onChange={(e) => setCurrentFood({ ...currentFood, calories: String(+e.target.value) })}
-              />
-              <Input
-                type="number"
-                placeholder="Protein (g)"
-                value={currentFood.protein}
-                onChange={(e) => setCurrentFood({ ...currentFood, protein: e.target.value })}
-              />
-              <Input
-                type="number"
-                placeholder="Carbs (g)"
-                value={currentFood.carbs}
-                onChange={(e) => setCurrentFood({ ...currentFood, carbs: String(+e.target.value) })}
-              />
-              <Input
-                type="number"
-                placeholder="Fat (g)"
-                value={currentFood.fat}
-                onChange={(e) => setCurrentFood({ ...currentFood, fat: String(+e.target.value) })}
-              />
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (currentFood.name) {
-                  setNewFoods([...newFoods, currentFood])
-                  setCurrentFood({ name: "", amount: "", calories: "", protein: "", carbs: "", fat: "" })
-                }
-              }}
-            >
-              + Add Food
-            </Button>
-
-            {newFoods.length > 0 && (
-              <div className="mt-4 space-y-2 text-sm">
-                <h5 className="font-medium">Foods Added:</h5>
-                {newFoods.map((food, index) => (
-                  <div key={index} className="flex justify-between text-muted-foreground">
-                    <span>{food.name} - {food.amount}</span>
-                    <span>{food.calories} kcal</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="flex justify-end pt-4">
-              <Button
-                onClick={() => {
-                  const newMeal = {
-                    id: Date.now(),
-                    name: newMealName,
-                    time: newMealTime,
-                    foods: newFoods.map((food) => ({
-                      ...food,
-                      calories: Number(food.calories),
-                      protein: Number(food.protein),
-                      carbs: Number(food.carbs),
-                      fat: Number(food.fat),
-                    })),
-                  }
-
-                  // const updatedPlan = {
-                  //   ...selectedPlan,
-                  //   meals: [...selectedPlan.meals, newMeal],
-                  // }
-                  const updatedMeals = [...selectedPlan.meals, newMeal]
-
-                      // Calculate totals from updated meals
-                      const totalCalories = updatedMeals.reduce(
-                        (sum, meal) => sum + meal.foods.reduce((mSum, food) => mSum + Number(food.calories), 0),
-                        0
-                      )
-                      const totalProtein = updatedMeals.reduce(
-                        (sum, meal) => sum + meal.foods.reduce((mSum, food) => mSum + Number(food.protein), 0),
-                        0
-                      )
-                      const totalCarbs = updatedMeals.reduce(
-                        (sum, meal) => sum + meal.foods.reduce((mSum, food) => mSum + Number(food.carbs), 0),
-                        0
-                      )
-                      const totalFat = updatedMeals.reduce(
-                        (sum, meal) => sum + meal.foods.reduce((mSum, food) => mSum + Number(food.fat), 0),
-                        0
-                      )
-
-                      const updatedPlan = {
-                        ...selectedPlan,
-                        meals: updatedMeals,
-                        calories: totalCalories,
-                        protein: totalProtein,
-                        carbs: totalCarbs,
-                        fat: totalFat,
-                      }
-
-
-                              const updatedPlans = mealPlans.map((plan) =>
-                                plan.id === selectedPlan.id ? updatedPlan : plan
-                              )
-
-                  setmealPlans(updatedPlans)
-                  setSelectedPlan(updatedPlan)
-
-                  // Reset dialog state
-                  setNewMealName("")
-                  setNewMealTime("")
-                  setNewFoods([])
-                  setCurrentFood({ name: "", amount: "", calories: "", protein: "", carbs: "", fat: "" })
-                  setOpenAddMeal(false)
-                }}
-              >
-                Save Meal
-              </Button>
-            </div>
-          </div>
-
-            </DialogContent>
-</Dialog>
-    
             </CardContent>
           </Card>
         </TabsContent>
 
-
-        {/* other tabscontent */}
         <TabsContent value="calendar" className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -572,7 +232,10 @@ function calculateNutritionFromMeals(meals:any[]) {
                 </Button>
               </div>
             </div>
-            
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Meal
+            </Button>
           </div>
 
           <Card>
@@ -716,8 +379,6 @@ function calculateNutritionFromMeals(meals:any[]) {
             </CardContent>
           </Card>
         </TabsContent>
-
-        
       </Tabs>
     </div>
   )
