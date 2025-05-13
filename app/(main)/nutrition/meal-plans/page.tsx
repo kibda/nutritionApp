@@ -92,6 +92,16 @@ function calculateNutritionFromMeals(meals:any[]) {
   )
 }
 
+const [editingPlan, setEditingPlan] = useState<typeof mealPlans2[0] | null>(null)
+const [editModalOpen, setEditModalOpen] = useState(false)
+
+const [editingMeal, setEditingMeal] = useState<any | null>(null)
+const [openEditMeal, setOpenEditMeal] = useState(false)
+
+
+
+
+
 
   
 
@@ -237,9 +247,73 @@ function calculateNutritionFromMeals(meals:any[]) {
                     View Details
                   </Button>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon">
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setEditingPlan(plan)
+                          setEditModalOpen(true)
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      {/* dialog edit name and desc */}
+                      <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Edit Meal Plan</DialogTitle>
+                          </DialogHeader>
+                          {editingPlan && (
+                            <div className="space-y-4">
+                              <Input
+                                value={editingPlan.name}
+                                onChange={(e) =>
+                                  setEditingPlan({ ...editingPlan, name: e.target.value })
+                                }
+                                placeholder="Meal Plan Name"
+                              />
+                              <Textarea
+                                value={editingPlan.description}
+                                onChange={(e) =>
+                                  setEditingPlan({ ...editingPlan, description: e.target.value })
+                                }
+                                placeholder="Description"
+                              />
+                              <div className="flex justify-end gap-2">
+                                <Button
+                                  variant="outline"
+                                  onClick={() => {
+                                    setEditModalOpen(false)
+                                    setEditingPlan(null)
+                                  }}
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    const updatedPlans = mealPlans.map((p) =>
+                                      p.id === editingPlan.id ? editingPlan : p
+                                    )
+                                    setmealPlans(updatedPlans)
+
+                                    // Also update selectedPlan if needed
+                                    if (selectedPlan?.id === editingPlan.id) {
+                                      setSelectedPlan(editingPlan)
+                                    }
+
+                                    setEditModalOpen(false)
+                                    setEditingPlan(null)
+                                  }}
+                                >
+                                  Save Changes
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        </DialogContent>
+                      </Dialog>
+
+
                     <Button variant="ghost" size="icon">
                       <Copy className="h-4 w-4" />
                     </Button>
@@ -322,6 +396,18 @@ function calculateNutritionFromMeals(meals:any[]) {
                           >
                             <Trash className="h-4 w-4 text-red-500" />
                           </Button>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              setEditingMeal({ ...meal })
+                              setOpenEditMeal(true)
+                            }}
+                          >
+                            <Edit className="h-4 w-4 text-blue-500" />
+                          </Button>
+
 
 
                         </div>
@@ -540,6 +626,191 @@ function calculateNutritionFromMeals(meals:any[]) {
 
             </DialogContent>
 </Dialog>
+
+{/* edit meeal dialog */}
+            <Dialog open={openEditMeal} onOpenChange={setOpenEditMeal} >
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit Meal</DialogTitle>
+                  <DialogDescription>Modify meal name, time, or foods.</DialogDescription>
+                </DialogHeader>
+
+                {editingMeal && (
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <Label>Meal Name</Label>
+                      <Input
+                        value={editingMeal.name}
+                        onChange={(e) => setEditingMeal({ ...editingMeal, name: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Time</Label>
+                      <Input
+                        type="time"
+                        value={editingMeal.time}
+                        onChange={(e) => setEditingMeal({ ...editingMeal, time: e.target.value })}
+                      />
+                    </div>
+
+                    <Separator />
+                    <h4 className="text-sm font-medium">Foods</h4>
+                    <div className="overflow-y-scroll max-h-96" >
+                    {editingMeal.foods.map((food: any, index: number) => (
+                      <div key={index} className="grid grid-cols-6 gap-2 items-center text-sm">
+                        <Input
+                          value={food.name}
+                          onChange={(e) => {
+                            const newFoods = [...editingMeal.foods]
+                            newFoods[index].name = e.target.value
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                          placeholder="Name"
+                        />
+                        <Input
+                          value={food.amount}
+                          onChange={(e) => {
+                            const newFoods = [...editingMeal.foods]
+                            newFoods[index].amount = e.target.value
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                          placeholder="Amount"
+                        />
+                        <Input
+                          type="number"
+                          value={food.calories}
+                          onChange={(e) => {
+                            const newFoods = [...editingMeal.foods]
+                            newFoods[index].calories = Number(e.target.value)
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                          placeholder="Calories"
+                        />
+                        <Input
+                          type="number"
+                          value={food.protein}
+                          onChange={(e) => {
+                            const newFoods = [...editingMeal.foods]
+                            newFoods[index].protein = Number(e.target.value)
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                          placeholder="Protein"
+                        />
+                        <Input
+                          type="number"
+                          value={food.carbs}
+                          onChange={(e) => {
+                            const newFoods = [...editingMeal.foods]
+                            newFoods[index].carbs = Number(e.target.value)
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                          placeholder="Carbs"
+                        />
+                        <Input
+                          type="number"
+                          value={food.fat}
+                          onChange={(e) => {
+                            const newFoods = [...editingMeal.foods]
+                            newFoods[index].fat = Number(e.target.value)
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                          placeholder="Fat"
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            const newFoods = editingMeal.foods.filter((_, i) => i !== index)
+                            setEditingMeal({ ...editingMeal, foods: newFoods })
+                          }}
+                        >
+                          <Trash className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
+                    ))}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const newFood = {
+                          name: "",
+                          amount: "",
+                          calories: 0,
+                          protein: 0,
+                          carbs: 0,
+                          fat: 0,
+                        }
+                        setEditingMeal({ ...editingMeal, foods: [...editingMeal.foods, newFood] })
+                      }}
+                    >
+                      + Add Food
+                    </Button>
+
+                    <div className="flex justify-end pt-4 gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setOpenEditMeal(false)
+                          setEditingMeal(null)
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const updatedMeals = selectedPlan.meals.map((m) =>
+                            m.id === editingMeal.id ? editingMeal : m
+                          )
+
+                          const updatedNutrition = {
+                            calories: updatedMeals.reduce(
+                              (sum, meal) =>
+                                sum + meal.foods.reduce((fSum, f) => fSum + Number(f.calories), 0),
+                              0
+                            ),
+                            protein: updatedMeals.reduce(
+                              (sum, meal) =>
+                                sum + meal.foods.reduce((fSum, f) => fSum + Number(f.protein), 0),
+                              0
+                            ),
+                            carbs: updatedMeals.reduce(
+                              (sum, meal) =>
+                                sum + meal.foods.reduce((fSum, f) => fSum + Number(f.carbs), 0),
+                              0
+                            ),
+                            fat: updatedMeals.reduce(
+                              (sum, meal) =>
+                                sum + meal.foods.reduce((fSum, f) => fSum + Number(f.fat), 0),
+                              0
+                            ),
+                          }
+
+                          const updatedPlan = {
+                            ...selectedPlan,
+                            meals: updatedMeals,
+                            ...updatedNutrition,
+                          }
+
+                          const updatedPlans = mealPlans.map((plan) =>
+                            plan.id === selectedPlan.id ? updatedPlan : plan
+                          )
+
+                          setmealPlans(updatedPlans)
+                          setSelectedPlan(updatedPlan)
+                          setOpenEditMeal(false)
+                          setEditingMeal(null)
+                        }}
+                      >
+                        Save Changes
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
+
     
             </CardContent>
           </Card>

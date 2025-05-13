@@ -1,5 +1,6 @@
 import React from "react"
 import { AppSidebar } from "@/components/app-sidebar"
+import { NutritionChatBubble } from "@/components/chat-bot"
 
 export default function MainLayout({
   children,
@@ -14,6 +15,7 @@ export default function MainLayout({
           {children}
         </div>
       </main>
+      <NutritionChatBubble />
     </div>
   )
 }

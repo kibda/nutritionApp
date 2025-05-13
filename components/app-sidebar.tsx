@@ -54,7 +54,7 @@ export function AppSidebar() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 text-xl font-bold">
             <Activity className="h-6 w-6 text-green-500" />
-            <span className="bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent">FitCoach</span>
+            <span className="bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent font-extrabold ">Calorize</span>
           </div>
           <SidebarTrigger className="ml-auto" />
         </div>

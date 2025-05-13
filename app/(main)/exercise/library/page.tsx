@@ -48,28 +48,30 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // Sample exercise data
 const exercises = [
   {
-    id: 1,
-    name: "Barbell Bench Press",
-    category: "Strength",
-    muscle: "Chest",
-    difficulty: "Intermediate",
-    equipment: "Barbell",
-    image: "/api/placeholder/600/400",
-    video: "https://www.youtube.com/shorts/_YrJc-kTYA0", // YouTube link
-    link: "https://www.example.com/exercise/bench-press", // Additional link for more information
-    description:
-      "A compound exercise that primarily targets the chest muscles, but also engages the shoulders and triceps.",
-    instructions: [
-      "Lie on a flat bench with your feet flat on the floor.",
-      "Grip the barbell with hands slightly wider than shoulder-width apart.",
-      "Lower the barbell to your mid-chest.",
-      "Press the barbell back up to the starting position.",
-      "Repeat for the desired number of repetitions.",
-    ],
-    rating: 4.8,
-    reviews: 324,
-    popularWith: ["Beginners", "Bodybuilders"]
-  },
+  id: 1,
+  name: "Barbell Bench Press",
+  category: "Strength",
+  muscle: "Chest",
+  difficulty: "Intermediate",
+  equipment: "Barbell",
+  image: "https://img.youtube.com/vi/2yjwXTZQDDI/hqdefault.jpg", // YouTube thumbnail
+  video: "https://www.youtube.com/watch?v=2yjwXTZQDDI", // Optional full link
+  link: "https://www.example.com/exercise/bench-press",
+  description:
+    "A compound exercise that primarily targets the chest muscles, but also engages the shoulders and triceps.",
+  instructions: [
+    "Lie on a flat bench with your feet flat on the floor.",
+    "Grip the barbell with hands slightly wider than shoulder-width apart.",
+    "Lower the barbell to your mid-chest.",
+    "Press the barbell back up to the starting position.",
+    "Repeat for the desired number of repetitions.",
+  ],
+  rating: 4.8,
+  reviews: 324,
+  popularWith: ["Beginners", "Bodybuilders"]
+}
+,
+
   {
     id: 2,
     name: "Squat",
@@ -77,8 +79,8 @@ const exercises = [
     muscle: "Legs",
     difficulty: "Intermediate",
     equipment: "Barbell",
-    image: "/api/placeholder/600/400",
-    video: "https://www.youtube.com/watch?v=dQFqjQT0V7A", // YouTube link
+    image: "https://img.youtube.com/vi/0gNqaP5B818/hqdefault.jpg",
+    video: "https://img.youtube.com/vi/IGaN66dcZEs/hqdefault.jpg", // YouTube link
     link: "https://www.example.com/exercise/squat", // Additional link for more information
     description: "A compound exercise that primarily targets the quadriceps, hamstrings, and glutes.",
     instructions: [
@@ -99,7 +101,7 @@ const exercises = [
     muscle: "Back",
     difficulty: "Advanced",
     equipment: "Barbell",
-    image: "/api/placeholder/600/400",
+    image: "https://img.youtube.com/vi/IGaN66dcZEs/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=36Uh3PYGG_k", // YouTube link
     link: "https://www.example.com/exercise/deadlift", // Additional link for more information
     description: "A compound exercise that targets multiple muscle groups including the back, glutes, and hamstrings.",
@@ -121,7 +123,7 @@ const exercises = [
     muscle: "Back",
     difficulty: "Intermediate",
     equipment: "Pull-Up Bar",
-    image: "/api/placeholder/600/400",
+    image: "https://img.youtube.com/vi/TQVk5VEqfSw/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=eGo4IYlbE5g",
     link: "https://www.example.com/exercise/pull-ups",
     description: "A bodyweight exercise that primarily targets the back and biceps muscles.",
@@ -143,7 +145,7 @@ const exercises = [
     muscle: "Shoulders",
     difficulty: "Intermediate",
     equipment: "Barbell",
-    image: "/api/placeholder/600/400",
+    image: "https://img.youtube.com/vi/cw4pTDmf4J0/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=2yjwXTZQDDI",
     link: "https://www.example.com/exercise/overhead-press",
     description: "A compound exercise that targets the shoulder muscles and triceps.",
@@ -165,7 +167,7 @@ const exercises = [
     muscle: "Hamstrings",
     difficulty: "Intermediate",
     equipment: "Barbell",
-    image: "/api/placeholder/600/400",
+    image: "https://img.youtube.com/vi/8JusDpSeshU/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=JCXUYuzwNrM",
     link: "https://www.example.com/exercise/romanian-deadlift",
     description: "A variation of the deadlift that primarily targets the hamstrings and lower back.",
@@ -357,10 +359,7 @@ export default function ExerciseLibraryPage() {
             {showBookmarksOnly ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
             {showBookmarksOnly ? "Showing Bookmarks" : "Show Bookmarks"}
           </Button>
-          <Button variant="outline" size="sm" className="hidden sm:flex gap-2">
-            <Plus className="h-4 w-4" />
-            Add Exercise
-          </Button>
+          
         </div>
       </div>
 
@@ -709,10 +708,7 @@ export default function ExerciseLibraryPage() {
                                 <DialogClose asChild>
                                   <Button variant="outline">Close</Button>
                                 </DialogClose>
-                                <Button className="gap-2">
-                                  <Plus className="h-4 w-4" />
-                                  Add to Workout
-                                </Button>
+                                
                               </DialogFooter>
                             </div>
                           </div>
@@ -890,20 +886,14 @@ export default function ExerciseLibraryPage() {
                                     <DialogClose asChild>
                                       <Button variant="outline">Close</Button>
                                     </DialogClose>
-                                    <Button className="gap-2">
-                                      <Plus className="h-4 w-4" />
-                                      Add to Workout
-                                    </Button>
+                                    
                                   </DialogFooter>
                                 </div>
                               </div>
                             </DialogContent>
                           </Dialog>
                           
-                          <Button variant="secondary" className="gap-2">
-                            <Plus className="h-4 w-4" />
-                            Add to Workout
-                          </Button>
+                          
                           
                           {exercise.video && (
                             <a
@@ -958,41 +948,11 @@ export default function ExerciseLibraryPage() {
         </div>
       )}
       
-      {/* Featured muscle groups section */}
-      <div className="mt-12">
-        <h3 className="text-xl font-semibold mb-4">Featured Muscle Groups</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {["Chest", "Back", "Legs", "Shoulders", "Arms", "Core", "Full Body", "Cardio"].map((muscle) => (
-            <Card key={muscle} className="overflow-hidden group cursor-pointer hover:shadow-md transition-shadow duration-200 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-              <div className="p-6 flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mb-3">
-                  <Dumbbell className="h-6 w-6 text-primary" />
-                </div>
-                <h4 className="font-semibold">{muscle}</h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {Math.floor(Math.random() * 30) + 10} exercises
-                </p>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
+     
       
-      <div className="mt-16 text-center p-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
-        <h3 className="text-2xl font-bold mb-2">Can't find what you're looking for?</h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-lg mx-auto">
-          Submit a new exercise to our library or contact our team for assistance.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button variant="default" size="lg" className="gap-2">
-            <Plus className="h-4 w-4" />
-            Submit Exercise
-          </Button>
-          <Button variant="outline" size="lg">
-            Contact Support
-          </Button>
-        </div>
-      </div>
+      
+      
+      
     </div>
   )
 }

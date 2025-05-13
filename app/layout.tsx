@@ -29,7 +29,7 @@ export default function RootLayout({
           </SidebarProvider>
           
         </ThemeProvider>
-        <NutritionChatBubble />
+        
       </body>
     </html>
   )
