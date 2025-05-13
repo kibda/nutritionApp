@@ -28,7 +28,9 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 
 
-// Sample meal plan data
+
+
+
 
 
 export default function MealPlansPage() {
