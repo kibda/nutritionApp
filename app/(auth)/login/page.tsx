@@ -34,7 +34,7 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md px-4">
         <div className="mb-8 flex items-center justify-center gap-2 text-center text-3xl font-bold text-white">
           <Dumbbell className="h-8 w-8" />
-          <span>FitCoach</span>
+          <span>Calorize</span>
         </div>
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">

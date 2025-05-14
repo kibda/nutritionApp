@@ -110,7 +110,13 @@ const [openEditMeal, setOpenEditMeal] = useState(false)
   return (
     <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Meal Plans</h2>
+        <div className="flex items-center gap-2">
+  <Utensils className="h-8 w-8 text-primary" />
+  <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-yellow-600 dark:from-green-400 dark:to-yellow-400">
+    Meal Plans
+  </h2>
+</div>
+
                         <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Button className="bg-gradient-to-r from-green-500 to-blue-600">

@@ -118,7 +118,56 @@ const mealPlans2 = [
       },
     ],
   },
-]
+  {
+    id: 3,
+    name: "Balanced Maintenance Plan",
+    description: "A well-rounded plan for maintaining current weight and supporting daily energy needs.",
+    calories: 2200,
+    protein: 160,
+    carbs: 220,
+    fat: 70,
+    meals: [
+      {
+        id: 1,
+        name: "Breakfast",
+        time: "7:30 AM",
+        foods: [
+          { name: "Scrambled Eggs", amount: "2 eggs", calories: 180, protein: 12, carbs: 2, fat: 14 },
+          { name: "Whole Wheat Toast", amount: "2 slices", calories: 160, protein: 6, carbs: 28, fat: 2 },
+          { name: "Orange", amount: "1 medium", calories: 60, protein: 1, carbs: 15, fat: 0 },
+        ],
+      },
+      {
+        id: 2,
+        name: "Lunch",
+        time: "12:30 PM",
+        foods: [
+          { name: "Turkey Sandwich", amount: "1 sandwich", calories: 400, protein: 30, carbs: 35, fat: 12 },
+          { name: "Carrot Sticks", amount: "1 cup", calories: 50, protein: 1, carbs: 12, fat: 0 },
+          { name: "Hummus", amount: "2 tbsp", calories: 70, protein: 2, carbs: 4, fat: 6 },
+        ],
+      },
+      {
+        id: 3,
+        name: "Snack",
+        time: "3:30 PM",
+        foods: [
+          { name: "Trail Mix", amount: "1/4 cup", calories: 200, protein: 6, carbs: 16, fat: 14 },
+          { name: "Apple", amount: "1 medium", calories: 95, protein: 0, carbs: 25, fat: 0 },
+        ],
+      },
+      {
+        id: 4,
+        name: "Dinner",
+        time: "6:30 PM",
+        foods: [
+          { name: "Grilled Chicken Thigh", amount: "5 oz", calories: 250, protein: 30, carbs: 0, fat: 15 },
+          { name: "Mashed Potatoes", amount: "1 cup", calories: 200, protein: 4, carbs: 35, fat: 7 },
+          { name: "Green Beans", amount: "1 cup", calories: 40, protein: 2, carbs: 8, fat: 0 },
+        ],
+      },
+    ],
+  },
+];
 
-
-export default mealPlans2
+export default mealPlans2;

@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { PlusCircle, Search, Pencil, Trash2 } from "lucide-react"
+import { PlusCircle, Search, Pencil, Trash2, UserCog } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -171,7 +171,13 @@ export default function AdminDashboard() {
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Nutrition Platform Admin</h1>
+          <div className="flex items-center gap-2">
+  <UserCog className="h-8 w-8 text-primary" />
+  <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-600">
+    Manage Coaches
+  </h1>
+</div>
+
           <Button onClick={handleAddCoach} className="bg-gradient-to-r from-green-500 to-blue-600">
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Coach
