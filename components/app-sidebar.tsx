@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   Activity,
   Calendar,
@@ -36,9 +36,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { useUser } from "@/app/context/UserContext"  // Import user context
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { user, isAdmin, logout } = useUser() // Get user and isAdmin from context
+  console.log("User:", user)
+  console.log("Is Admin:", isAdmin)
+  
   const [openGroups, setOpenGroups] = useState({
     nutrition: true,
     exercise: true,
@@ -48,6 +54,12 @@ export function AppSidebar() {
   })
 
   const isActive = (path: string) => pathname === path
+  
+  // Handle logout
+  const handleLogout = () => {
+    logout()
+    router.push("/login")
+  }
 
   return (
     <Sidebar variant="sidebar" collapsible="icon">
@@ -182,31 +194,6 @@ export function AppSidebar() {
             <CollapsibleContent>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {/* <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/coaching/sessions")}>
-                      <Link href="/coaching/sessions">
-                        <Calendar />
-                        <span>Book Sessions</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/coaching/messages")}>
-                      <Link href="/coaching/messages">
-                        <MessageSquare />
-                        <span>Messages</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem> */}
-                  {/* <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/coaching/payments")}>
-                      <Link href="/coaching/payments">
-                        <CreditCard />
-                        <span>Payments</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem> */}
-                  {/* meraih */}
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive("/Payment")}>
                       <Link href="/Payment">
@@ -227,7 +214,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild isActive={isActive("/CoachReservation")}>
                       <Link href="/CoachReservation">
                         <Calendar />
-                        <span>coach Reservation</span>
+                        <span>Coach Reservation</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -260,63 +247,63 @@ export function AppSidebar() {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/Feedback-Dashboard")}>
-                      <Link href="/Feedback-Dashboard">
-                        <Activity />
-                        <span>Feedback Dashboard</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </CollapsibleContent>
           </SidebarGroup>
         </Collapsible>
 
-        <Collapsible
-          open={openGroups.admin}
-          onOpenChange={(open) => setOpenGroups({ ...openGroups, admin: open })}
-          className="group/collapsible"
-        >
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger className="flex w-full items-center">
-                Admin
-                <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/nutrition/meal-plans")}>
-                      <Link href="/admin/manageCoaches">
-                        <UserCog />
-                        <span>Manage Coaches</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
+        {/* Admin section - Only visible to admin users */}
+        {isAdmin && (
+          <Collapsible
+            open={openGroups.admin}
+            onOpenChange={(open) => setOpenGroups({ ...openGroups, admin: open })}
+            className="group/collapsible"
+          >
+            <SidebarGroup>
+              <SidebarGroupLabel asChild>
+                <CollapsibleTrigger className="flex w-full items-center">
+                  Admin
+                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                </CollapsibleTrigger>
+              </SidebarGroupLabel>
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild isActive={isActive("/admin/manageCoaches")}>
+                        <Link href="/admin/manageCoaches">
+                          <UserCog />
+                          <span>Manage Coaches</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
 
-
-
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild isActive={isActive("/Feedback-Dashboard")}>
+                        <Link href="/Feedback-Dashboard">
+                          <Activity />
+                          <span>Feedback Dashboard</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="p-4">
         <div className="flex items-center gap-2">
           <Avatar className="h-9 w-9">
             <AvatarImage src="/placeholder.svg?height=36&width=36" alt="User" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarFallback>{user?.name ? user.name.charAt(0) : 'U'}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="text-sm font-medium">John Doe</span>
-            <span className="text-xs text-muted-foreground">Premium Member</span>
+            <span className="text-sm font-medium">{user?.name || "Guest"}</span>
+            <span className="text-xs text-muted-foreground">{isAdmin ? "Admin" : "Member"}</span>
           </div>
           <div className="ml-auto flex gap-1">
             <ModeToggle />
@@ -325,10 +312,8 @@ export function AppSidebar() {
                 <Settings className="h-4 w-4" />
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/login">
-                <LogOut className="h-4 w-4" />
-              </Link>
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" />
             </Button>
           </div>
         </div>

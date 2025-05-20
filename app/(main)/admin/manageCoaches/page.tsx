@@ -75,18 +75,18 @@ export default function AdminDashboard() {
     },
   ])
 
-  // State for search query
+  // State lel search
   const [searchQuery, setSearchQuery] = useState("")
 
-  // State for coach form dialog
+  // coach form dialog
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [currentCoach, setCurrentCoach] = useState<Coach | null>(null)
 
-  // State for delete confirmation dialog
+  // delete confirmation dialog
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [coachToDelete, setCoachToDelete] = useState<Coach | null>(null)
 
-  // Form state
+  // Form 
   const [formData, setFormData] = useState({
     name: "",
     email: "",

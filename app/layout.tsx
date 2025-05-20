@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import { NutritionChatBubble } from "@/components/chat-bot"
+import { UserProvider } from "./context/UserContext"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <UserProvider>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <SidebarProvider>
             {children}
@@ -29,7 +31,7 @@ export default function RootLayout({
           </SidebarProvider>
           
         </ThemeProvider>
-        
+        </UserProvider>
       </body>
     </html>
   )

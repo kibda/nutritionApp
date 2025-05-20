@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useState, useRef, FormEvent } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Dumbbell } from "lucide-react"
@@ -11,15 +9,111 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useUser } from "@/app/context/UserContext"
+
+// Define the user type
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "user";
+}
 
 export default function LoginPage() {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const { login } = useUser()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>("")
+  
+  // Form refs with proper types
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
+  const confirmPasswordRef = useRef<HTMLInputElement>(null)
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate login
+    setError("")
+    
+    const email = emailRef.current?.value
+    const password = passwordRef.current?.value
+    
+    // Check if it's the admin account
+    if (email === "admin@calorize.com" && password === "admin123") {
+      // Log in as admin
+      console.log("Logging in as admin")
+      const adminUser: User = {
+        id: "admin1",
+        name: "Admin User",
+        email: "admin@calorize.com",
+        role: "admin"
+      }
+      login(adminUser)
+      
+      // Add a brief delay for UX purposes
+      setTimeout(() => {
+        setIsLoading(false)
+        router.push("/dashboard")
+      }, 1000)
+    } else {
+      // For demo purposes, accept any valid-looking email/password combination
+      if (email && password && password.length >= 6) {
+        // Log in as regular user
+        console.log("Logging in as regular user")
+        const regularUser: User = {
+          id: "user1",
+          name: "Regular User",
+          email: email || "",
+          role: "user"
+        }
+        login(regularUser)
+        
+        setTimeout(() => {
+          setIsLoading(false)
+          router.push("/dashboard")
+        }, 1000)
+      } else {
+        setIsLoading(false)
+        setError("Invalid email or password")
+      }
+    }
+  }
+
+  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+    
+    const name = nameRef.current?.value
+    const email = emailRef.current?.value
+    const password = passwordRef.current?.value
+    const confirmPassword = confirmPasswordRef.current?.value
+    
+    // Simple validation
+    if (!name || !email || !password) {
+      setIsLoading(false)
+      setError("All fields are required")
+      return
+    }
+    
+    if (password !== confirmPassword) {
+      setIsLoading(false)
+      setError("Passwords do not match")
+      return
+    }
+    
+    // Register as regular user
+    const newUser: User = {
+      id: "user" + Math.floor(Math.random() * 1000),
+      name: name,
+      email: email,
+      role: "user"
+    }
+    
+    console.log("Registering new user:", newUser)
+    login(newUser)
+    
     setTimeout(() => {
       setIsLoading(false)
       router.push("/dashboard")
@@ -27,7 +121,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center ">
+    <div className="w-full h-screen flex items-center justify-center">
       {/* Background image overlay covers the entire viewport */}
       <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-20" />
       
@@ -50,9 +144,10 @@ export default function LoginPage() {
               <CardContent>
                 <form onSubmit={handleLogin}>
                   <div className="grid gap-4">
+                    {error && <div className="text-red-500 text-sm">{error}</div>}
                     <div className="grid gap-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="name@example.com" required />
+                      <Input id="email" type="email" placeholder="name@example.com" ref={emailRef} required />
                     </div>
                     <div className="grid gap-2">
                       <div className="flex items-center justify-between">
@@ -61,7 +156,7 @@ export default function LoginPage() {
                           Forgot password?
                         </Link>
                       </div>
-                      <Input id="password" type="password" required />
+                      <Input id="password" type="password" ref={passwordRef} required />
                     </div>
                     <Button
                       type="submit"
@@ -70,6 +165,12 @@ export default function LoginPage() {
                     >
                       {isLoading ? "Signing in..." : "Sign In"}
                     </Button>
+                    
+                    {/* Helper text for demo purposes */}
+                    <div className="text-xs text-center text-muted-foreground">
+                      <p>Admin login: admin@calorize.com / admin123</p>
+                      <p>Or use any email/password for regular user</p>
+                    </div>
                   </div>
                 </form>
               </CardContent>
@@ -96,25 +197,32 @@ export default function LoginPage() {
                 <CardDescription>Enter your information to create an account</CardDescription>
               </CardHeader>
               <CardContent>
-                <form>
+                <form onSubmit={handleRegister}>
                   <div className="grid gap-4">
+                    {error && <div className="text-red-500 text-sm">{error}</div>}
                     <div className="grid gap-2">
                       <Label htmlFor="name">Full Name</Label>
-                      <Input id="name" type="text" placeholder="John Doe" required />
+                      <Input id="name" type="text" placeholder="John Doe" ref={nameRef} required />
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="name@example.com" required />
+                      <Label htmlFor="register-email">Email</Label>
+                      <Input id="register-email" type="email" placeholder="name@example.com" ref={emailRef} required />
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input id="password" type="password" required />
+                      <Label htmlFor="register-password">Password</Label>
+                      <Input id="register-password" type="password" ref={passwordRef} required />
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="confirm-password">Confirm Password</Label>
-                      <Input id="confirm-password" type="password" required />
+                      <Input id="confirm-password" type="password" ref={confirmPasswordRef} required />
                     </div>
-                    <Button className="w-full bg-gradient-to-r from-green-500 to-blue-600">Create Account</Button>
+                    <Button 
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-green-500 to-blue-600"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Creating Account..." : "Create Account"}
+                    </Button>
                   </div>
                 </form>
               </CardContent>

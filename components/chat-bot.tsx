@@ -20,11 +20,11 @@ export function NutritionChatBubble() {
       <Button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "h-24 w-24 rounded-full bg-green-600 hover:bg-green-700 shadow-lg flex items-center justify-center",
+          "h-20 w-20 rounded-full bg-green-600 hover:bg-green-700 shadow-lg flex items-center justify-center",
           isOpen ? "hidden" : "flex"
         )}
       >
-        <MessageCircle className="h-14 w-14" />
+        <MessageCircle  style={{ width: 30  }}/>
         <span className="sr-only">Open nutrition chat</span>
       </Button>
 
